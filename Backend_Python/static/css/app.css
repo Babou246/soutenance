@@ -1,0 +1,24 @@
+.canvas-container {
+    height: 300px;
+    width: 500px;
+    
+}
+
+.canvas-line {
+    height: 300px;
+    width: 500px;
+    
+}
+
+
+.canvas-pie {
+    height: 300px;
+    width: 300px;
+    
+} 
+
+.canvas-barh {
+    height: 300px;
+    width: 500px;
+    
+} 

@@ -1,0 +1,70 @@
+{% extends 'layout/layout.html' %}
+{% block title %} 
+    Dashbord
+{% endblock %}
+
+{% block content %}
+
+      <!-- Main -->
+    <main class="main-container">
+        <div class="main-title">
+          <h2>DASHBOARD</h2>
+        </div>
+
+        <div class="main-cards">
+
+          <div class="card">
+            <div class="card-inner">
+              <h3>ARTICLES</h3>
+              <span class="material-icons-outlined">inventory_2</span>
+            </div>
+            <h1 class="text-center">{{ unique }}</h1>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <h3>CHIFFRE D'AFFAIRES</h3>
+              <span class="material-icons-outlined">category</span>
+            </div>
+            <h1 class="text-center">{{ c }}$</h1>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <h3>CLIENTS</h3>
+              <span class="material-icons-outlined">groups</span>
+            </div>
+            <h1 class="text-center">{{ client }}</h1>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <h3>BENEFICES</h3>
+              <span class="material-icons-outlined">category</span>
+            </div>
+            <h1 class="text-center">{{ b }}$</h1>
+          </div>
+
+        </div>
+
+        <div class="charts">
+
+          <div class="charts-card">
+            <h2 class="chart-title">Chiffre d'Affaire/Ville</h2>
+            <div id="bar-chart"></div>
+          </div>
+
+          <div class="charts-card">
+            <h2 class="chart-title">Bénéfice et Chiffre d'affaire des Articles</h2>
+            <div id="area-chart"></div>
+          </div>
+
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <!-- ApexCharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
