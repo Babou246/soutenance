@@ -7,35 +7,33 @@
 
 {% block content %}
     <h1>dash</h1>
+    
+      
     <table class="table">
         <thead>
           <tr>
             <th scope="col">#</th>
             <th scope="col">Clients</th>
+            <th scope="col">Articles</th>
             <th scope="col">Commercial</th>
             <th scope="col">Chiffre</th>
             <th scope="col">Bénéfice</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+            {% for d in data %}
+            <tr>
+              <th scope="row">1</th>
+              <td>{{ d.get('Client') }}</td>
+              <td>{{ d.get('Article') }}</td>
+              <td>{{ d.get('Commerce') }}</td>
+              <td>{{ d.get('Chiffre') }}$</td>
+              <td>{{ d.get('Benefice') }}$</td>
+            </tr>
+            {% endfor %}
+
+        
         </tbody>
-      </table>
+    </table>
     
 {% endblock %}

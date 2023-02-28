@@ -11,7 +11,7 @@
           <h2>DASHBOARD</h2>
         </div>
 
-        <div class="main-cards">
+        <div class="main-cards" id="card">
 
           <div class="card">
             <div class="card-inner">
@@ -55,6 +55,16 @@
           </div>
 
           <div class="charts-card">
+            <h2 class="chart-title">PIE CHART</h2>
+            <div id="pie-chart"></div>
+          </div>
+
+          <div class="charts-card">
+            <h2 class="chart-title">Clients/Quantité d'Article Vendus</h2>
+            <div id="barh-chart"></div>
+          </div>
+
+          <div class="charts-card">
             <h2 class="chart-title">Bénéfice et Chiffre d'affaire des Articles</h2>
             <div id="area-chart"></div>
           </div>
@@ -67,4 +77,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>
     <!-- Custom JS -->
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
+
+{% block popup %}
+
+
+{% endblock %}
+{% block javas %}
+  <script>
+    
+    document.getElementById("card").addEventListener("click", function() {
+      document.getElementById("tout").style.display = "block";
+    });
+    document.getElementById("fermer-popup").addEventListener("click", function() {
+      document.getElementById("tout").style.display = "none";
+    });
+  </script>
+
 {% endblock %}
