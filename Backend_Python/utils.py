@@ -1,12 +1,11 @@
 from cluster import *
-from flask import jsonify
+from flask import jsonify,request
 
 es = es()
 
 # FUNCTIONS
 def get_items(items):
     # requête pour récupérer les données
-    # es = es()
     query = {
         "query": {
             "match_all": {}
@@ -47,6 +46,7 @@ def api():
 
     return jsonify(data)
 
+
 def datas():
     # es = es()
     res = es.search(index='excel-data', body={'query': {'match_all': {}},'size':10000})
@@ -64,6 +64,8 @@ def datas():
         for hit in hits]
     return data
 
+# print(datas())
+
 def around(items):
     return round(sum(items),2)
 
@@ -77,4 +79,13 @@ def import_quel(Champs1):
 
     return data
 
-print(import_quel("Article"))
+def get_data():
+    res = es.search(index='excel-data', body={'query': {"match_phrase_prefix": {"Client": "d"}},'size':1000})
+    hits = res['hits']['hits']
+    data = [
+        {'items': hit['_source']
+        }
+        for hit in hits]
+    return data
+
+# print(get_data())

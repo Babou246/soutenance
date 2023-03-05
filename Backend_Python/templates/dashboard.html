@@ -72,11 +72,7 @@
         </div>
     </main>
 
-    <!-- Scripts -->
-    <!-- ApexCharts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.5/apexcharts.min.js"></script>
-    <!-- Custom JS -->
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
 {% endblock %}
 
 {% block popup %}
@@ -85,7 +81,6 @@
 {% endblock %}
 {% block javas %}
   <script>
-    
     document.getElementById("card").addEventListener("click", function() {
       document.getElementById("tout").style.display = "block";
     });

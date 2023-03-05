@@ -10,7 +10,17 @@ app = Flask(__name__)
 es = es()
 
 # ROUTES
-@app.route('/')
+@app.route('/pipe', methods=["GET", "POST"])
+def pipe():
+    data = request.form.get("data")
+    payload = {}
+    headers= {}
+    url = "http://127.0.0.1:9200/autocomplete?query="+str(data)
+    response = requests.request("GET", url, headers=headers, data = payload)
+    return response.json()
+
+
+@app.route('/index',methods=['GET','POST'])
 def index():
     return render_template('index.html')
 
@@ -20,7 +30,7 @@ def apii():
     return api()
 
 
-@app.route('/dash')
+@app.route('/')
 def dash():
     count = get_items('Article')
     count1 = get_items('Client')
@@ -52,25 +62,34 @@ def select():
         'Chiffre': hit['_source']['Chiffre d\'affaire']
         }
         for hit in hits]
-    # print(d)
-    # Déterminez le nombre de résultats par page
-    resultats_par_page = 10
+    return render_template('dash.html',data=d)
 
-    # Récupérez le numéro de page à partir des arguments de requête
-    page = request.args.get('page', 1, type=int)
+@app.route("/search")
+def search_autocomplete():
+    query = request.args["q"].lower()
+    tokens = query.split(" ")
+    MAX_SIZE = 5
+    clauses = [
+        {
+            "span_multi": {
+                "match": {"fuzzy": {"Client": {"value": i, "fuzziness": "AUTO"}}}
+            }
+        }
+        for i in tokens
+    ]
 
-    # Calculez l'indice de début et l'indice de fin pour la pagination
-    debut = (page - 1) * resultats_par_page
-    fin = debut + resultats_par_page
+    payload = {
+        "bool": {
+            "must": [{"span_near": {"clauses": clauses, "slop": 0, "in_order": False}}]
+        }
+    }
 
-    # Créez une liste de résultats pour la page actuelle
-    resultat_page = d[debut:fin]
+    resp = es.search(index="excel-data", query=payload, size=MAX_SIZE)
+    return [result['_source']['Client'] for result in resp['hits']['hits']]
 
-    # Calculez le nombre total de pages
-    nombre_pages = len(d) // resultats_par_page + (len(d) % resultats_par_page > 0)
 
-    # Renvoyez le template avec les données de la page actuelle et les informations de pagination
-    return render_template('dash.html', resultat_page=resultat_page, nombre_pages=nombre_pages, page=page,data=d)
+
+
 
 
 

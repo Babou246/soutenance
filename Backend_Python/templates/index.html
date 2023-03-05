@@ -1,10 +1,57 @@
 
 {% extends 'layout/layout.html' %}
 
+{% block css %}
+
+{% endblock %}
+
 {% block title %} 
-    <p>Accueil</p>
+    Accueil
 {% endblock %}
 
 {% block content %}
     <h1>Bonjour</h1>
+    <main class="main-container">
+        
+        <div class="chart-index">
+          <div class="chart-card">
+
+            <!-- <h2 class="chart-title">Bénéfice et Chiffre d'affaire des Articles</h2> -->
+            <div id="search">
+              <input id="search-box" class="form-control">
+              
+            </div>
+            <p class="results"></p><br>
+          </div>
+
+        </div> 
+    </main>
+{% endblock %}
+
+{% block javas %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      $(document).ready(function() {
+        let debounce;
+        $('#search-box').on('keydown', function (e) { 
+          clearTimeout(debounce)
+          debounce = setTimeout(() => {
+            getAutoComplete();  
+          }, 300);
+        })
+      })
+
+      function getAutoComplete() {
+        const query = $('#search-box').val();
+        fetch(`http://127.0.0.1:5000/search?q=${encodeURIComponent(query.trim())}`)
+        .then((resp) => resp.json())
+        .then((data) => {
+            $('.results').empty();
+            for (let i = 0; i < data.length; i++) {
+              console.log(data)
+              $('.results').append(`${data[i]}<br>`)
+            }
+        })
+      }
+    </script>
 {% endblock %}
