@@ -1,48 +1,43 @@
-// SIDEBAR TOGGLE
 
-var sidebarOpen = false;
-var sidebar = document.getElementById("sidebar");
-
-function openSidebar() {
-  if(!sidebarOpen) {
-    sidebar.classList.add("sidebar-responsive");
-    sidebarOpen = true;
+function refresh() {
+    // Rafraîchir l'élément HTML toutes les 5 secondes
+    
+    let refreshElement = document.getElementById('card');
+    //   refreshElement.textContent = 'Nouveau contenu à ' + new Date().toLocaleTimeString();
+    
+  
+    // Recharger la page entière après 30 secondes
+    setTimeout(function() {
+      location.reload();
+    }, 30000);
   }
-}
+  setInterval(refresh,5000)
+  
 
-function closeSidebar() {
-  if(sidebarOpen) {
-    sidebar.classList.remove("sidebar-responsive");
-    sidebarOpen = false;
-  }
-}
-
-
-
-// ---------- CHARTS ----------
-fetch('/dash/data')
-  .then(response => response.json())
-  .then(data => {
+function load(){
+    // -======================================================================================
+    fetch('/dash/data')
+    .then(response => response.json())
+    .then(data => {
     // Récupérer les labels et les données à partir des données de l'API
-    const labels = data.map(item => item.Ville);
+    const labels = data.map(item => item.pays);
     // console.log(labels)
-    const listeCaracteres = data.map(item => item.Chiffre);
-    const values = listeCaracteres.map(chiffre => parseInt(chiffre));
-    let value = values.filter((element, index) => {
-        return values.indexOf(element) === index;
+    const listeCaracteres = data.map(item => item.quantite);
+    let value = listeCaracteres.filter((element, index) => {
+        return listeCaracteres.indexOf(element) === index;
     });
     let valeur = value.slice(0, 7);
 
     let label = labels.filter((element, index) => {
         return labels.indexOf(element) === index;
     });
-    let labelss = label.slice(0, 7);
+    let labelss = label.slice(0, 7).sort((a, b) => a - b);
 
-// BAR CHART
+    // BAR CHART
     var barChartOptions = {
     series: [{
         data: valeur,
-        name: "Chiffre d'affaire en $",
+        name: "Quantité de Produit Vendus",
     }],
     chart: {
         type: "bar",
@@ -148,102 +143,118 @@ fetch('/dash/data')
     };
     var barChart = new ApexCharts(document.querySelector("#bar-chart"), barChartOptions);
     barChart.render();
-})
-// =======================================================================================
-fetch('/dash/data')
-  .then(response => response.json())
-  .then(data => {
+    })
+    // =======================================================================================
+    fetch('/dash/data')
+    .then(response => response.json())
+    .then(data => {
     // Récupérer les labels et les données à partir des données de l'API
-    const labels = data.map(item => item.Article);
-    // console.log(labels)
-    const listeCaracteres = data.map(item => item.Chiffre);
-    const values = listeCaracteres.map(chiffre => parseInt(chiffre));
-    let value = values.filter((element, index) => {
-        return values.indexOf(element) === index;
-    });
-    let valeur = value.slice(0, 7);
-
-    let label = labels.filter((element, index) => {
+    const labels = data.map(item => item.produit);
+    let p = labels.filter((element, index) => {
         return labels.indexOf(element) === index;
     });
-    let labelss = label.slice(0, 4);
+    let produit = p.slice(0, 4);
+    console.log('<******************>',produit)
+    // console.log(labels)
+    const values = data.map(item => item.quantite);
+
+    let valeur = values.slice(0, 4);
     // Créer l'objet de configuration du graphique
     var pieChartOptions = {
-      series: valeur,
-      labels: labelss,
-      chart: {
+        series: valeur,
+        labels: produit,
+        chart: {
         type: "pie",
         height: 350,
-      },
-      colors: [
+        },
+        colors: [
         "#2962ff",
         "#d50000",
         "#2e7d32",
         "#ff6d00",
         "#583cb3",
-      ],
-      dataLabels: {
+        ],
+        dataLabels: {
         enabled: true,
         formatter: function (val, opts) {
-          const total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
-          const percentage = ((val / total) * 100).toFixed(2) + "%";
-          return `${percentage}`;
+            const total = opts.w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+            const percentage = ((val / total) * 100).toFixed(2) + "%";
+            return `${percentage}`;
         },
         style: {
-          fontSize: "24px",
-          fontFamily: "Helvetica, Arial, sans-serif",
-          fontWeight: 400,
-          colors: undefined,
+            fontSize: "24px",
+            fontFamily: "Helvetica, Arial, sans-serif",
+            fontWeight: 400,
+            colors: undefined,
         },
         dropShadow: {
-          enabled: true,
-          blur: 3,
-          opacity: 0.8,
+            enabled: true,
+            blur: 3,
+            opacity: 0.8,
         },
-      },
-      legend: {
+        },
+        legend: {
         position: "bottom",
         labels: {
-          colors: "#f5f7ff",
+            colors: "#f5f7ff",
         },
-      },
-      tooltip: {
+        },
+        tooltip: {
         theme: "dark",
-      },
+        },
     };
 
     // Créer le graphique
     var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieChartOptions);
     pieChart.render();
-})
-
-// var barChart = new ApexCharts(document.querySelector("#bar-chart"), barChartOptions);
-// barChart.render();
+    })
 
 
-fetch('/dash/data')
-  .then(response => response.json())
-  .then(data => {
+    fetch('/dash/data')
+    .then(response => response.json())
+    .then(data => {
     // Récupérer les labels et les données à partir des données de l'API
-    const labels = data.map(item => item.Ville);
-    const listeCaracteres = data.map(item => item.Benefice);
-    const values = listeCaracteres.map(chiffre => parseInt(chiffre));
-    let v = values.filter((element, index) => {
+    const labels = data.map(item => item.benefice);
+    const values = data.map(item => item.produit);
+    const q = data.map(item => item.quantite);
+    const prix = data.map(item => item.prix_unitaire);
+    const chiffre = [];
+
+    for (let i = 0; i < prix.length; i++) {
+        chiffre.push(q[i] * prix[i]);
+    }
+
+
+    let v = chiffre.filter((element, index) => {
+        return chiffre.indexOf(element) === index;
+    });
+    let lab = v.slice(0, 10);
+    console.log('<============================>',lab)
+
+    let p = values.filter((element, index) => {
         return values.indexOf(element) === index;
     });
-    let valuees = v.slice(0, 10);
-
-    // Chiffre daffaire
-    const liste = data.map(item => item.Chiffre);
-    const value = liste.map(chiffre => parseInt(chiffre));
+    let value = p.slice(0, 4);
+    console.log('<============================>',value)
     
-    let valuee = value.slice(0, 10);
-    // la date des commande
-    const listeArticle = data.map(item => item.Date);
-    let l = listeArticle.filter((element, index) => {
-        return listeArticle.indexOf(element) === index;
+
+    // ================================
+    // Formatage de la date '2021-11-30T00:00:00.000Z';
+    const d = data.map(item => item.date);
+    const formattedDates = [];
+    for (const dateStr of d) {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    formattedDates.push(`${year}/${month}/${day}`);
+    }
+
+    // console.log(formattedDates);
+    let l = formattedDates.filter((element, index) => {
+        return formattedDates.indexOf(element) === index;
     });
-    let listeArticles = l.slice(0, 15);
+    let date = l.slice(0, 15);
 
     // Rendre Unique les elements
     
@@ -254,10 +265,10 @@ fetch('/dash/data')
     var areaChartOptions = {
     series: [{
         name: "Bénéfices",
-        data: valuees,
+        data: lab,
     }, {
-        name: "Chiffre d'affaires",
-        data: valuee,
+        name: "Produits",
+        data: value,
     }],
     chart: {
         type: "area",
@@ -269,7 +280,7 @@ fetch('/dash/data')
         },
     },
     colors: ["#00ab57", "#d50000"],
-    labels: listeArticles,
+    labels: date,
     dataLabels: {
         enabled: false,
     },
@@ -366,32 +377,34 @@ fetch('/dash/data')
 
     var areaChart = new ApexCharts(document.querySelector("#area-chart"), areaChartOptions);
     areaChart.render();
-})
+    })
 
-// ====================================================================
+    // ====================================================================
 
 
-fetch('/dash/data')
-  .then(response => response.json())
-  .then(data => {
+    fetch('/dash/data')
+    .then(response => response.json())
+    .then(data => {
     // Récupérer les labels et les données à partir des données de l'API
-    const labels = data.map(item => item.Client);
+    const labels = data.map(item => item.nom);
 
-    const listeCaracteres = data.map(item => item.Quantité);
-    const values = listeCaracteres.map(chiffre => parseInt(chiffre));
+    const listeCaracteres = data.map(item => item.quantite);
+    // const values = listeCaracteres.map(chiffre => parseInt(chiffre));
     let value = listeCaracteres.filter((element, index) => {
         return listeCaracteres.indexOf(element) === index;
     });
-    // console.log('==========',value)
-    let valeur = value.slice(0, 7);
+    // console.log('==========xxxxx',value)
+    let valeur = value.slice(0, 15);
     console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH',valeur)
 
     let label = labels.filter((element, index) => {
         return labels.indexOf(element) === index;
     });
-    let labelss = label.slice(0, 7);
+    console.log("label",label)
 
-// BAR CHART
+    let lab = label.slice(0, 15);
+
+    // BAR CHART
     var barChartOptions = {
     series: [{
         data: valeur,
@@ -457,7 +470,7 @@ fetch('/dash/data')
         theme: "dark",
     },
     xaxis: {
-        categories: labelss,
+        categories: lab,
         title: {
         style: {
             color: "#f5f7ff",
@@ -501,4 +514,8 @@ fetch('/dash/data')
     };
     var barChart = new ApexCharts(document.querySelector("#barh-chart"), barChartOptions);
     barChart.render();
-})
+    })
+}
+
+setInterval(load,3000)
+  

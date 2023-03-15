@@ -10,14 +10,28 @@ app = Flask(__name__)
 es = es()
 
 # ROUTES
-@app.route('/pipe', methods=["GET", "POST"])
+@app.route('/index', methods=["GET", "POST"])
 def pipe():
     data = request.form.get("data")
-    payload = {}
-    headers= {}
-    url = "http://127.0.0.1:9200/autocomplete?query="+str(data)
-    response = requests.request("GET", url, headers=headers, data = payload)
-    return response.json()
+    # payload = {}
+    # headers= {}
+    # url = "http://127.0.0.1:9200/autocomplete?query="+str(data)
+    # response = requests.request("GET", url, headers=headers, data = payload)
+    # return response.json()
+    res = es.search(index='data-babou', body={"track_total_hits": "true","query":{ "bool": {"must": [{"match_phrase_prefix": {"nom": {"query": '{}'}}}],"filter": [],"should": [],"must_not":[] }},"aggs": {"auto_complete": {"terms": {"field": "nom.keyword","order": {"_count": "desc"},"size": 25}}}}).format(data)
+    hits = res['hits']['hits']
+    d = [
+        {'Benefice': hit['_source']['benefice'], 
+        'nom': hit['_source']['nom'],
+        'quantite': hit['_source']['quantite'],
+        'pays': hit['_source']['pays'],
+        'produit': hit['_source']['produit'],
+        'prix_unitaire': hit['_source']['prix_unitaire'],
+        'date': hit['_source']['date'],
+        'sexe': hit['_source']['sexe']
+        }
+        for hit in hits]
+    return render_template('index.html',datas=d)
 
 
 @app.route('/index',methods=['GET','POST'])
@@ -32,34 +46,40 @@ def apii():
 
 @app.route('/')
 def dash():
-    count = get_items('Article')
-    count1 = get_items('Client')
-    chiffre = get_items('Chiffre d\'affaire')
-    benefice = get_items('Bénéfice')
-    entiers = data_to_float(chiffre)
-    benefices = data_to_float(benefice)
-    c = around(entiers)
+    count = get_items('produit')
+    q = get_items('quantite')
+    p = get_items('prix_unitaire')
+    count1 = get_items('nom')
+    conver_q= list(map(float, q))
+
+    result = [conver_q[i] * p[i] for i in range(len(conver_q))]
+        
+
+    benefices = get_items('benefice')
+    c = sum(result)
+
     b = around(benefices)
     unique = delete_double_items(count)
     unique1 = delete_double_items(count1)
     unique=len(unique)
     client=len(unique1)
     d = datas()
-    return render_template('dashboard.html',count=count,unique=unique,client=client,c=c,b=b,data=d)
+    return render_template('dashboard.html',count=count,c=c,unique=unique,client=client,b=b,data=d)
+
 
 @app.route('/select')
 def select():
-    res = es.search(index='excel-data', body={'query': {'match_all': {}},'size':10000})
+    res = es.search(index='data-babou', body={"track_total_hits": 'true','query': {'match_all': {}}})
     hits = res['hits']['hits']
     d = [
-        {'Benefice': hit['_source']['Bénéfice'], 
-        'Commerce': hit['_source']['Commercial'],
-        'Quantité': hit['_source']['Quantité'],
-        'Ville': hit['_source']['Ville'],
-        'Client': hit['_source']['Client'],
-        'Article': hit['_source']['Article'],
-        'Date': hit['_source']['Date de commande'],
-        'Chiffre': hit['_source']['Chiffre d\'affaire']
+        {'Benefice': hit['_source']['benefice'], 
+        'nom': hit['_source']['nom'],
+        'quantite': hit['_source']['quantite'],
+        'pays': hit['_source']['pays'],
+        'produit': hit['_source']['produit'],
+        'prix_unitaire': hit['_source']['prix_unitaire'],
+        'date': hit['_source']['date'],
+        'sexe': hit['_source']['sexe']
         }
         for hit in hits]
     return render_template('dash.html',data=d)

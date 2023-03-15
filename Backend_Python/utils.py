@@ -7,16 +7,30 @@ es = es()
 def get_items(items):
     # requête pour récupérer les données
     query = {
+        "track_total_hits": "true",
         "query": {
             "match_all": {}
         }
     }
-    res = es.search(index='excel-data', body=query, size=10000)
+    res = es.search(index='data-babou', body=query)
     
     # extraction des résultats
     count = res['hits']['total']['value']
     hits = res['hits']['hits']
     return [hits[i]['_source'][items] for i in range(len(hits)-1)]
+
+def Count(index):
+    query = {
+        "track_total_hits": "true",
+        "query": {
+            "match_all": {}
+        }
+    }
+    res = es.search(index=index, body=query)
+    
+    # extraction des résultats
+    return res['hits']['hits']['_count']
+
 
 
 def data_to_float(items):
@@ -30,17 +44,17 @@ def delete_double_items(items):
 
 def api():
     # es = es()
-    res = es.search(index='excel-data', body={'query': {'match_all': {}},'size':10000})
+    res = es.search(index='data-babou', body={"track_total_hits": 'true','query': {'match_all': {}}})
     hits = res['hits']['hits']
     data = [
-        {'Benefice': hit['_source']['Bénéfice'], 
-        'Commerce': hit['_source']['Commercial'],
-        'Quantité': hit['_source']['Quantité'],
-        'Ville': hit['_source']['Ville'],
-        'Client': hit['_source']['Client'],
-        'Article': hit['_source']['Article'],
-        'Date': hit['_source']['Date de commande'],
-        'Chiffre': hit['_source']['Chiffre d\'affaire']
+        {'benefice': hit['_source'].get('benefice'), 
+        'nom': hit['_source'].get('nom'),
+        'quantite': hit['_source'].get('quantite'),
+        'pays': hit['_source'].get('pays'),
+        'produit': hit['_source'].get('produit'),
+        'prix_unitaire': hit['_source'].get('prix_unitaire'),
+        'date': hit['_source'].get('date'),
+        'sexe': hit['_source'].get('sexe')
         }
         for hit in hits]
 
@@ -49,17 +63,17 @@ def api():
 
 def datas():
     # es = es()
-    res = es.search(index='excel-data', body={'query': {'match_all': {}},'size':10000})
+    res = es.search(index='excel-data', body={"track_total_hits": 'true','query': {'match_all': {}}})
     hits = res['hits']['hits']
     data = [
-        {'Benefice': hit['_source']['Bénéfice'], 
-        'Commerce': hit['_source']['Commercial'],
-        'Quantité': hit['_source']['Quantité'],
-        'Ville': hit['_source']['Ville'],
-        'Client': hit['_source']['Client'],
-        'Article': hit['_source']['Article'],
-        'Date': hit['_source']['Date de commande'],
-        'Chiffre': hit['_source']['Chiffre d\'affaire']
+        {'benefice': hit['_source'].get('benefice'), 
+        'nom': hit['_source'].get('nom'),
+        'quantite': hit['_source'].get('quantite'),
+        'pays': hit['_source'].get('pays'),
+        'produit': hit['_source'].get('produit'),
+        'prix_unitaire': hit['_source'].get('prix_unitaire'),
+        'date': hit['_source'].get('date'),
+        'sexe': hit['_source'].get('sexe')
         }
         for hit in hits]
     return data
@@ -71,7 +85,7 @@ def around(items):
 
 
 def import_quel(Champs1):
-    res = es.search(index='excel-data', body={'query': {'match_all': {}},'size':10000})
+    res = es.search(index='data-babou', body={"track_total_hits": 'true','query': {'match_all': {}}})
     hits = res['hits']['hits']
 
     data = [
@@ -80,7 +94,7 @@ def import_quel(Champs1):
     return data
 
 def get_data():
-    res = es.search(index='excel-data', body={'query': {"match_phrase_prefix": {"Client": "d"}},'size':1000})
+    res = es.search(index='data-babou', body={'query': {"match_phrase_prefix": {"Client": "d"}}})
     hits = res['hits']['hits']
     data = [
         {'items': hit['_source']

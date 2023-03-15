@@ -18,8 +18,13 @@
 
             <!-- <h2 class="chart-title">Bénéfice et Chiffre d'affaire des Articles</h2> -->
             <div id="search">
-              <input id="search-box" class="form-control">
-              
+              <input id="search-box" name="data" class="form-control">
+              <hr><br>
+              {% for d in datas %}
+              <ul>
+                <li>{{ d.get("nom") }}</li>
+              </ul>
+              {% endfor %}
             </div>
             <p class="results"></p><br>
           </div>
