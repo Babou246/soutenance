@@ -1,6 +1,6 @@
 # soutenance
 
-# Flask ![flask](https://user-images.githubusercontent.com/66678204/225342042-29f90d3d-2d81-46f5-82b7-e0f2ff10aca4.png)
+![flask](https://user-images.githubusercontent.com/66678204/225342042-29f90d3d-2d81-46f5-82b7-e0f2ff10aca4.png)
 
 ### Ce qu'il faut faire c'est installer les dependances avec pip 
 $ cd Backend_Python
@@ -11,7 +11,7 @@ $ source nom_env/bin/activate
 
 $ pip3 install -r requirements.txt
 
-### 2 ement se placer sur le repertoire ELK ![ELK](https://user-images.githubusercontent.com/66678204/225342527-b7458c58-b5e3-4edb-b753-9c04fe5ee542.png)
+### ![ELK](https://user-images.githubusercontent.com/66678204/225342527-b7458c58-b5e3-4edb-b753-9c04fe5ee542.png)
 
 $ cd ELK
 
@@ -26,7 +26,7 @@ $ python3 charger.py
 
 ## Pour des besoins d'automatisations 
 
-### Installer Airflow ![Airflow](https://user-images.githubusercontent.com/66678204/225342708-207d479f-9f9f-43a8-b7af-6008dacbe9bb.png)
+### ![Airflow](https://user-images.githubusercontent.com/66678204/225342708-207d479f-9f9f-43a8-b7af-6008dacbe9bb.png)
 
 $ mkdir airflow
 
