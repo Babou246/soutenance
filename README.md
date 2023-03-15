@@ -14,6 +14,12 @@ $ cd ELK
 
 $ docker-compose up
 
+# PostgreSQL
+
+### Generer des données dans la bases Postgresql
+
+$ python3 charger.py
+
 
 ## Pour des besoins d'automatisations 
 ### Installer Airflow
@@ -33,3 +39,5 @@ $ airflow scheduler
 $ mkdir /home/nom_user/airflow/dags
 
 $ touch main.py
+
+plus details : https://github.com/Babou246/Airflow.git
