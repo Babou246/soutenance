@@ -9,7 +9,7 @@ function refresh() {
     // Recharger la page entière après 30 secondes
     setTimeout(function() {
       location.reload();
-    }, 30000);
+    }, 3000);
   }
   setInterval(refresh,5000)
   
@@ -266,10 +266,12 @@ function load(){
     series: [{
         name: "Bénéfices",
         data: lab,
-    }, {
-        name: "Produits",
-        data: value,
-    }],
+    }
+    // , {
+    //     name: "Produits",
+    //     data: value,
+    // }
+    ],
     chart: {
         type: "area",
         background: "transparent",
