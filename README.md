@@ -45,8 +45,6 @@ $ mkdir /home/nom_user/airflow/dags
 
 $ touch main.py
 
-![Capture d’écran du 2023-03-16 12-48-39](https://user-images.githubusercontent.com/66678204/225622431-a59788a7-8a05-4bf3-9a00-7a39c810bf45.png)
-
 plus details : https://github.com/Babou246/Airflow.git
 
 
