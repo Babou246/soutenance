@@ -48,5 +48,4 @@ $ touch main.py
 plus details : https://github.com/Babou246/Airflow.git
 
 
-![Capture d’écran du 2023-03-16 12-57-10](https://user-images.githubusercontent.com/66678204/225623821-2527d589-aadf-4bcc-883d-4119aa9a3049.png)
 
